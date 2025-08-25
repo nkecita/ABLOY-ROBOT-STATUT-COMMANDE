@@ -282,7 +282,7 @@ Module Module1
 
                                     Dim Chaine_Sql As String
 
-                                    Chaine_Sql = "select num_client,transfert,num_usine,date_usine,nom_usine,montant_usine,societe,email,num_commande,ref_client,ref_valideur from commandes_portes where num_commande = " & CInt(Right(.Item("NUMCOM"), 7).ToString).ToString.Trim
+                                    Chaine_Sql = "select num_client,transfert,num_usine,date_usine,nom_usine,montant_usine,societe,email,num_commande,ref_client,ref_valideur,souche from commandes_portes where num_commande = " & CInt(Right(.Item("NUMCOM"), 7).ToString).ToString.Trim
                                     Dim cBase As String = IIf(configGene.test = "OUI", configGene.databasefichettest, configGene.databasefichet)
 
                                     Dim adapter = New OleDb.OleDbDataAdapter(Chaine_Sql, cBase)
@@ -343,7 +343,7 @@ Module Module1
                                     Dim mybody As String
                                     mybody = cImagePays
                                     mybody = mybody & traduction(cLanguepf, "MAIL", "CONFADM2")
-                                    mybody = mybody & " CEW" & dsCde.Tables(0).Rows(0).Item("num_commande").ToString.PadLeft(7, "0")
+                                    mybody = mybody & dsCde.Tables(0).Rows(0).Item("souche").ToString & dsCde.Tables(0).Rows(0).Item("num_commande").ToString.PadLeft(7, "0")
                                     mybody = mybody & "<br>"
                                     mybody = mybody & traduction(cLanguepf, "MAIL", "CONFADM4")
                                     mybody = mybody & refclient
