@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CONFIG>
+  <!--   Si test =OUI alors le programme utilise la base de données  <DATABASE-FICHET-TEST>   -->
+  <TEST>OUI</TEST>
+  
+  <!--   CHAINE DE CONNEXION SQL SERVEUR BASE FICHET PRINCIPALE    -->
+  <DATABASE-FICHET>provider=SQLOLEDB;server=serveurprod,1515;Trusted_Connection=false;uid=fichet-sql;pwd=jlm556;database=FICHET_NEW;Pooling=true;Max Pool Size=500</DATABASE-FICHET>
+
+  <!--   CHAINE DE CONNEXION SQL SERVEUR POUR LES TESTS    -->
+  <DATABASE-FICHET-TEST>Provider=SQLOLEDB;Data Source=ABDEL-PC\SQLEXPRESS;Initial Catalog=FICHET_AX;Integrated Security=SSPI</DATABASE-FICHET-TEST>
+
+  <!--   REPERTOIRE OU SONT LES FICHIERS XML   -->
+  <FILES-XML>U:\sup\Data</FILES-XML>
+  
+  <!--   REPERTOIRE DE SAUVEGARDE   -->
+  <FILES-XML-BACKUP>U:\sup\Data\backup</FILES-XML-BACKUP>
+  
+  <!--   NOMBRE DE JOURS AVANT LA SUPPRESSION DES REPERTOIRES DE SAUVEGARDE   -->
+  <JOURHISTO>60</JOURHISTO>
+
+  <!--   SERVEUR SMTP POUR L'ENVOI DU MAIL DE CONFIRMATION   -->
+  <SMTPHOST>smtp-relay.sendinblue.com</SMTPHOST>
+  <SMTPPORT>587</SMTPPORT>
+  <STMPLOGIN>nkecita@ciage.fr</STMPLOGIN>
+  <SMTPPASSWORD>U71J5OKwaMmCnxYI</SMTPPASSWORD>
+  <EMAIL-TO>nkecita@ciage.fr,laurent.machu@assaabloy.com,florian.teyssedre@assaabloy.com</EMAIL-TO>
+   
+ </CONFIG>
