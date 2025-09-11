@@ -1,17 +1,19 @@
-﻿Imports System.Net
-Imports System.Xml
-Imports System
+﻿Imports System
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.IO
-Imports System.Text
-Imports System.Reflection
+Imports System.Net
 Imports System.Net.Mail
+Imports System.Reflection
+Imports System.Text
+Imports System.Text.RegularExpressions
+Imports System.Xml
 
 
 
 Public Structure configRobot
-    
+
+
 
     Dim databasefichet As String
     Dim databasefichettest As String
@@ -142,7 +144,8 @@ Module Module1
 
 
 
-           
+
+
 
             Console.WriteLine("lecture des fichiers phase 3")
 
@@ -157,10 +160,12 @@ Module Module1
                 If DsCommande.Tables.Count = 1 Then
                     For t = 0 To DsCommande.Tables(0).Rows.Count - 1
                         Console.WriteLine(DsCommande.Tables(0).Rows(t).Item("NUMCOM"))
+                        Dim cdeEcon As String = DsCommande.Tables(0).Rows(t).Item("NUMCOM")
+                        cdeEcon = Regex.Match(cdeEcon, "\d+").Value
                         ismail = False
                         With DsCommande.Tables(0).Rows(t)
                             OkUpdate = True
-                            ismail = is_mail(CInt(Right(.Item("NUMCOM"), 7).ToString).ToString.Trim)
+                            ismail = is_mail(CInt(cdeEcon.ToString).ToString.Trim)
 
 
                             Dim csql As String
@@ -256,7 +261,7 @@ Module Module1
                             'Numéro de commande
                             Dim dbParam_commande As System.Data.IDataParameter = New OleDb.OleDbParameter
                             dbParam_commande.ParameterName = "@commande"
-                            dbParam_commande.Value = CInt(Right(.Item("NUMCOM"), 7).ToString).ToString.Trim
+                            dbParam_commande.Value = CInt(cdeEcon.ToString).ToString.Trim
                             dbParam_commande.DbType = System.Data.DbType.[String]
                             oSqlAdapter.UpdateCommand.Parameters.Add(dbParam_commande)
 
@@ -267,9 +272,22 @@ Module Module1
                             Dim rowsaffected As Integer = 0
 
                             If OkUpdate Then
-                                Console.WriteLine("Mise à jour su statut de la commande")
-                                rowsaffected = oSqlAdapter.UpdateCommand.ExecuteNonQuery()
-                                Console.WriteLine("Mise à jour su statut de la commande : " + rowsaffected.ToString)
+                                Console.WriteLine("Mise à jour du statut de la commande")
+                                Try
+
+                                    rowsaffected = oSqlAdapter.UpdateCommand.ExecuteNonQuery()
+
+                                    'MessageBox.Show("Mise à jour réussie. Lignes affectées : " & rowsaffected.ToString())
+
+                                Catch ex As SqlClient.SqlException
+                                    ' Erreurs SQL spécifiques (ex: violation de clé, syntaxe SQL...)
+                                    log("Erreur SQL : " & ex.Message)
+
+                                Catch ex As Exception
+                                    ' Toutes les autres erreurs .NET
+                                    log("Erreur générale : " & ex.Message)
+                                End Try
+                                'Console.WriteLine("Mise à jour su statut de la commande : " + rowsaffected.ToString)
                             End If
 
                             If rowsaffected = 1 Then
@@ -282,7 +300,7 @@ Module Module1
 
                                     Dim Chaine_Sql As String
 
-                                    Chaine_Sql = "select num_client,transfert,num_usine,date_usine,nom_usine,montant_usine,societe,email,num_commande,ref_client,ref_valideur,souche from commandes_portes where num_commande = " & CInt(Right(.Item("NUMCOM"), 7).ToString).ToString.Trim
+                                    Chaine_Sql = "select num_client,transfert,num_usine,date_usine,nom_usine,montant_usine,societe,email,num_commande,ref_client,ref_valideur,souche from commandes_portes where num_commande = " & CInt(cdeEcon.ToString).ToString.Trim
                                     Dim cBase As String = IIf(configGene.test = "OUI", configGene.databasefichettest, configGene.databasefichet)
 
                                     Dim adapter = New OleDb.OleDbDataAdapter(Chaine_Sql, cBase)
